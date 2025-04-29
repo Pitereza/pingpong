@@ -2,7 +2,12 @@ from pygame import *
 display.set_caption("Shooter")
 window = display.set_mode((700, 500))
 background = transform.scale(image.load("3.jpg"), (700, 500))
-
+s1 = 0
+s2 = 0
+font.init()
+font = font.SysFont("Arial", 40)
+l1 = font.render("Player 1 lose", True,(255,0,0))
+l2 = font.render("Player 2 lose", True,(0,0,255))
 class GameSprite(sprite.Sprite):
 #конструктор класса
   def __init__(self, player_image, player_x, player_y, size_x, size_y, player_speed):
@@ -67,8 +72,28 @@ while run:
         b.rect.y += speed_y
         if b.rect.y < 0 or b.rect.y > 450:
             speed_y *= -1
+        if b.rect.x < 0:
+            s2 = s2 + 1
+            b.rect.y = 190
+            b.rect.x = 300
+        if b.rect.x > 700:
+            s1 = s1 + 1 
+            b.rect.y = 190
+            b.rect.x = 300
         if sprite.collide_rect(r1, b) or sprite.collide_rect(r2, b):
             speed_x *= -1
         
-
+        if s2 > 9:
+            finish = True
+            window.blit(l1,(200,200))
+            
+        if s1 > 9:
+            finish = True
+            window.blit(l2,(200,200))
+            b.rect.y = 190
+            b.rect.x = 300
+        s1s = font.render("Счет: " + str(s1), 1, (255, 0, 0))
+        s2s = font.render("Счет: " + str(s2), 1, (0, 0, 255))
+        window.blit(s1s,(5,10))
+        window.blit(s2s,(550,450))
         display.update()
